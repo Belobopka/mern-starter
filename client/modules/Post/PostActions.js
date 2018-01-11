@@ -4,8 +4,27 @@ import callApi from '../../util/apiCaller';
 export const ADD_POST = 'ADD_POST';
 export const ADD_POSTS = 'ADD_POSTS';
 export const DELETE_POST = 'DELETE_POST';
+export const ADD_MESSAGE = 'ADD_MESSAGE';
+export const DELETE_MESSAGE = 'DELETE_MESSAGE';
 
 // Export Actions
+
+export function addMessage(message, cuidPost) {
+  return {
+    type: ADD_MESSAGE,
+    message,
+    cuidPost
+  };
+}
+
+export function deleteMessage(cuidMessage, cuidPost) {
+  return {
+    type: ADD_MESSAGE,
+    cuidMessage,
+    cuidPost,
+  };
+}
+
 export function addPost(post) {
   return {
     type: ADD_POST,
