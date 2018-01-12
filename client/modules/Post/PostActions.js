@@ -4,26 +4,34 @@ import callApi from '../../util/apiCaller';
 export const ADD_POST = 'ADD_POST';
 export const ADD_POSTS = 'ADD_POSTS';
 export const DELETE_POST = 'DELETE_POST';
-export const ADD_MESSAGE = 'ADD_MESSAGE';
-export const DELETE_MESSAGE = 'DELETE_MESSAGE';
+export const ADD_COMMENT = 'ADD_COMMENT';
+export const DELETE_COMMENT = 'DELETE_COMMENT';
 
 // Export Actions
 
-export function addMessage(message, cuidPost) {
+export function addComment(comment, cuidPost) {
   return {
-    type: ADD_MESSAGE,
-    message,
+    type: ADD_COMMENT,
+    comment,
     cuidPost
   };
 }
 
-export function deleteMessage(cuidMessage, cuidPost) {
+export function deleteComment(cuidPost, cuidComment) {
   return {
-    type: ADD_MESSAGE,
-    cuidMessage,
+    type: DELETE_COMMENT,
     cuidPost,
+    cuidComment,
   };
 }
+
+export function deleteCommentRequest(cuidPost, cuidComment) {
+  return (dispatch) => {
+    return callApi(`comments/${cuidPost}`, 'delete', { cuidPost, cuidComment }).
+    then(() => dispatch(deleteComment(cuidPost, cuidComment)));
+  };
+}
+
 
 export function addPost(post) {
   return {
