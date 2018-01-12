@@ -21,7 +21,7 @@ const PostReducer = (state = initialState, action) => {
       };
 
     case DELETE_COMMENT :
-      const newData = state.data.slice();
+   /*   const newData = state.data.slice();
       newData.forEach(post => {
         if (post.cuid === action.cuidPost) {
           post.comments = post.comments.filter((cuidpostComment) => {
@@ -29,21 +29,19 @@ const PostReducer = (state = initialState, action) => {
           });
         }
       });
+      */
       return {
-        data: newData,
+        data: state.data.slice().map(post => {
+          if (post.cuid === action.cuidPost) {
+            post.comments = post.comments.filter((cuidpostComment) => {
+              return cuidpostComment.cuid !== action.cuidComment;
+            });
+          }
+          console.log(post);
+          return post;
+        }),
       };
     case ADD_COMMENT :
- /*   const newDataAdd = state.data.slice();
-      newDataAdd.forEach(post => {
-        if (post.cuid === action.cuidPost) {
-          post.comments.push(action.comment);
-        }
-      });
-      return {
-        data: newDataAdd,
-      };
-*/
-      console.log(action);
       return {
         data: state.data.slice().map(post => {
           if (post.cuid === action.cuidPost) {
