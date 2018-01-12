@@ -7,22 +7,41 @@ import { FormattedMessage } from 'react-intl';
 import styles from '../../components/PostListItem/PostListItem.css';
 
 // Import Actions
-import { fetchPost } from '../../PostActions';
+import { fetchPost, deleteCommentRequest } from '../../PostActions';
 
 // Import Selectors
 import { getPost } from '../../PostReducer';
 
-export function PostDetailPage(props) {
-  return (
-    <div>
-      <Helmet title={props.post.title} />
-      <div className={`${styles['single-post']} ${styles['post-detail']}`}>
-        <h3 className={styles['post-title']}>{props.post.title}</h3>
-        <p className={styles['author-name']}><FormattedMessage id="by" /> {props.post.name}</p>
-        <p className={styles['post-desc']}>{props.post.content}</p>
+// Import TextForm for comments
+import PostCommentTextBox from './PostCommentTextBox';
+
+// Import PostCommentList
+import PostCommentsList from '../../components/PostCommentsList';
+
+
+export class PostDetailPage extends React.Component {
+  handleDeleteComment = (cuidComment) => {
+    if (confirm('Do you want to delete this message?')) { // eslint-disable-line
+      this.props.dispatch(deleteCommentRequest(this.props.post.cuid, cuidComment));
+    }
+  };
+  render = () => {
+    return (
+      <div>
+        <Helmet title={this.props.post.title} />
+        <div className={`${styles['single-post']} ${styles['post-detail']}`}>
+          <h3 className={styles['post-title']}>{this.props.post.title}</h3>
+          <p className={styles['author-name']}><FormattedMessage id="by" /> {this.props.post.name}</p>
+          <p className={styles['post-desc']}>{this.props.post.content}</p>
+        </div>
+        <PostCommentTextBox cuid={this.props.post.cuid} />
+        <PostCommentsList
+          comments={this.props.post.comments}
+          handleDeleteComment={this.handleDeleteComment}
+        />
       </div>
-    </div>
   );
+  }
 }
 
 // Actions required to provide data for this component to render in sever side.
@@ -44,7 +63,9 @@ PostDetailPage.propTypes = {
     content: PropTypes.string.isRequired,
     slug: PropTypes.string.isRequired,
     cuid: PropTypes.string.isRequired,
+    comments: PropTypes.array.isRequired,
   }).isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps)(PostDetailPage);
