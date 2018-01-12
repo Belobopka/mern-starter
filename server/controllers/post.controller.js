@@ -87,32 +87,21 @@ export function deletePost(req, res) {
  * @returns void
  */
 export function addMessage(req, res) {
-  const newMessage = { name: req.body.post.name, content: req.body.post.content, cuid: cuid() };
+  const comment = { name: req.body.post.commentName, content: req.body.post.commentContent, cuid: cuid() };
   Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
-    post.comments.push(newMessage);
+    post.comments.push(comment);
     console.error(post);
-    post.save((error) => {
+    post.save((error, saved) => {
       if (error) {
         res.status(500).send(err);
         console.error('ERROR!');
       }
-      console.error('post saved');
+      res.json(comment);
+      console.error('addMessage saved');
     });
   });
-
- /* Post.update({ cuid: req.params.cuid }, { comments: [...comments, newMessage] }, (err, post) => {
-    post.comments.push(newMessage);
-    console.error(post);
-    post.save((error) => {
-      if (error) {
-        res.status(500).send(err);
-        console.error('ERROR!');
-      }
-      console.error('post saved');
-    })
-  });
-  */
 }
+
 /**
  * Get a single post
  * @param req

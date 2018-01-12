@@ -5,7 +5,7 @@ import callApi from '../../../../util/apiCaller';
 // Import Style
 import styles from './PostCommentTextBox.css';
 
-export class PostCommentTextBox extends PureComponent {
+export class PostCommentTextBox extends React.Component {
   constructor(props) {
     super(props);
     this.state = { name: '', content: '' };
@@ -16,15 +16,10 @@ export class PostCommentTextBox extends PureComponent {
   handleContentChange = (e) => {
     this.setState({ content: e.target.value });
   }
-  addMessage = () => {
+  addComment = () => {
     const name = this.state.name;
     const content = this.state.content;
-    callApi(`comments/${this.props.cuid}`, 'post', {
-      post: {
-        name,
-        content,
-      },
-    });
+    this.props.handleAddComment(name, content);
   };
 
   render() {
@@ -35,7 +30,7 @@ export class PostCommentTextBox extends PureComponent {
           <h2 className={styles['form-title']}><FormattedMessage id="createNewPost" /></h2>
           <input placeholder={this.props.intl.messages.authorName} className={styles['form-field']} onChange={this.handleNameChange} />
           <textarea placeholder={this.props.intl.messages.postContent} className={styles['form-field']} onChange={this.handleContentChange} />
-          <a className={styles['post-submit-button']} href="#" onClick={this.addMessage}><FormattedMessage id="submit" /></a>
+          <button className={styles['post-submit-button']} onClick={this.addComment}><FormattedMessage id="submit" /></button>
         </div>
       </div>
     );

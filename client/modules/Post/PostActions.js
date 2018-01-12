@@ -17,6 +17,18 @@ export function addComment(comment, cuidPost) {
   };
 }
 
+export function addCommentRequest(cuidPost, commentName, commentContent) {
+  return (dispatch) => {
+    return callApi(`comments/${cuidPost}`, 'post', {
+      post: {
+        commentName,
+        commentContent,
+      },
+    })
+    .then((res) => dispatch(addComment(res, cuidPost)));
+  };
+}
+
 export function deleteComment(cuidPost, cuidComment) {
   return {
     type: DELETE_COMMENT,
