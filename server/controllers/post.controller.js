@@ -46,6 +46,7 @@ export function addPost(req, res) {
   });
 }
 
+
 /**
  * Get a single post
  * @param req
@@ -78,3 +79,61 @@ export function deletePost(req, res) {
     });
   });
 }
+
+/**
+ * Get a single post
+ * @param req
+ * @param res
+ * @returns void
+ */
+export function addMessage(req, res) {
+  const newMessage = { name: req.body.post.name, content: req.body.post.content, cuid: cuid() };
+  Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
+    post.comments.push(newMessage);
+    console.error(post);
+    post.save((error) => {
+      if (error) {
+        res.status(500).send(err);
+        console.error('ERROR!');
+      }
+      console.error('post saved');
+    });
+  });
+
+ /* Post.update({ cuid: req.params.cuid }, { comments: [...comments, newMessage] }, (err, post) => {
+    post.comments.push(newMessage);
+    console.error(post);
+    post.save((error) => {
+      if (error) {
+        res.status(500).send(err);
+        console.error('ERROR!');
+      }
+      console.error('post saved');
+    })
+  });
+  */
+}
+/**
+ * Get a single post
+ * @param req
+ * @param res
+ * @returns void
+ */
+export function deleteMessage(req, res) {
+  Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
+    if (err) {
+      res.status(500).send(err);
+    }
+    post.comments = post.comments.filter(comments => comments.cuid !== req.body.cuidComment);
+    post.save(error => {
+      if (error) {
+        console.error('post delete messsage Error');
+      }
+    })
+    .then(() => {
+      console.log('post got');
+      res.status(200).end();
+    });
+  });
+}
+
