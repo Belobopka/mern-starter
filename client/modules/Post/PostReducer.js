@@ -40,7 +40,7 @@ const PostReducer = (state = initialState, action) => {
         data: state.data.slice(0).map(post => {
           if (post.cuid === action.cuidPost) {
             return {
-              ...post, comments: [...post.comments, action.comment],
+              ...post, comments: [action.comment, ...post.comments],
             };
           }
           return post;

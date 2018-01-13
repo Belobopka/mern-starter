@@ -89,15 +89,19 @@ export function deletePost(req, res) {
 export function addMessage(req, res) {
   const comment = { name: req.body.post.commentName, content: req.body.post.commentContent, cuid: cuid() };
   Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
-    post.comments.push(comment);
-    console.error(post);
+    if(err){
+      console.error(err);
+    }
+    const newPostComments = [comment, ...post.comments];
+    post.set({ comments: newPostComments });
     post.save((error, saved) => {
       if (error) {
         res.status(500).send(err);
         console.error('ERROR!');
+      } else {
+        res.json(comment);
+        console.error('addMessage saved');
       }
-      res.json(comment);
-      console.error('addMessage saved');
     });
   });
 }
@@ -113,7 +117,8 @@ export function deleteMessage(req, res) {
     if (err) {
       res.status(500).send(err);
     }
-    post.comments = post.comments.filter(comments => comments.cuid !== req.body.cuidComment);
+    const newPostComments = post.comments.filter(comments => comments.cuid !== req.body.cuidComment);
+    post.set({ comments: newPostComments });
     post.save(error => {
       if (error) {
         console.error('post delete messsage Error');
@@ -125,4 +130,5 @@ export function deleteMessage(req, res) {
     });
   });
 }
+
 

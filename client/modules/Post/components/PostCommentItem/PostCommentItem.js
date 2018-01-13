@@ -9,7 +9,10 @@ function PostCommentItem(props) {
     <div className={styles['single-post']}>
       <p className={styles['author-name']}><FormattedMessage id="by" /> {props.comment.name}</p>
       <p className={styles['post-desc']}>{props.comment.content}</p>
-      <p className={styles['post-action']}><button onClick={props.onDelete}><FormattedMessage id="deletePost" /></button></p>
+      <p className={styles['post-action']}>
+        <submit onClick={props.onDelete}><FormattedMessage id="deleteMessage" /></submit>
+        <submit onClick={props.onRedact}><FormattedMessage id="edit" /></submit>
+      </p>
       <hr className={styles.divider} />
     </div>
   );
