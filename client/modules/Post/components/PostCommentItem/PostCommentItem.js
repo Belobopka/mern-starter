@@ -11,7 +11,7 @@ function PostCommentItem(props) {
       <p className={styles['post-desc']}>{props.comment.content}</p>
       <p className={styles['post-action']}>
         <submit onClick={props.onDelete}><FormattedMessage id="deleteMessage" /></submit>
-        <submit onClick={props.onRedact}><FormattedMessage id="edit" /></submit>
+        <submit onClick={props.handleToggleCommentEditBox}><FormattedMessage id="edit" /></submit>
       </p>
       <hr className={styles.divider} />
     </div>
@@ -24,6 +24,7 @@ PostCommentItem.propTypes = {
     content: PropTypes.string.isRequired,
     cuid: PropTypes.string.isRequired,
   }).isRequired,
+  handleToggleCommentEditBox: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
 };
 

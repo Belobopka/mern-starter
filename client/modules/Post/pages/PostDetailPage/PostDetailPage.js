@@ -7,10 +7,12 @@ import { FormattedMessage } from 'react-intl';
 import styles from '../../components/PostListItem/PostListItem.css';
 
 // Import Actions
-import { fetchPost, deleteCommentRequest, addCommentRequest } from '../../PostActions';
+import { fetchPost, deleteCommentRequest, addCommentRequest, toggleEditCommentBox, editCommentRequest } from '../../PostActions';
 
 // Import Selectors
 import { getPost } from '../../PostReducer';
+
+import { getEditComment } from '../../MsgEditPostReducer';
 
 // Import TextForm for comments
 import PostCommentTextBox from './PostCommentTextBox';
@@ -18,6 +20,7 @@ import PostCommentTextBox from './PostCommentTextBox';
 // Import PostCommentList
 import PostCommentsList from '../../components/PostCommentsList';
 
+import CommentEditBox from '../../components/CommentEditBox/CommentEditBox';
 
 export class PostDetailPage extends React.Component {
   handleDeleteComment = (cuidComment) => {
@@ -28,8 +31,18 @@ export class PostDetailPage extends React.Component {
   handleAddComment = (commentName, commentContent) => {
     this.props.dispatch(addCommentRequest(this.props.post.cuid, commentName, commentContent));
   }
+  handleToggleCommentEditBox = (commentcuid, commentAuthor) => {
+    // editbox is toggled
+    this.props.dispatch(toggleEditCommentBox(!this.props.messageEditInfo.commentEditToggle, commentcuid, commentAuthor));
+  }
+  handleEditComment = (newCommentData) => {
+    this.props.dispatch(editCommentRequest(this.props.post.cuid, {
+      cuid: this.props.messageEditInfo.commentcuid,
+      author: this.props.messageEditInfo.commentAuthor,
+    },
+    newCommentData));
+  }
   render = () => {
-    console.log('detail-page');
     return (
       <div>
         <Helmet title={this.props.post.title} />
@@ -38,18 +51,26 @@ export class PostDetailPage extends React.Component {
           <p className={styles['author-name']}><FormattedMessage id="by" /> {this.props.post.name}</p>
           <p className={styles['post-desc']}>{this.props.post.content}</p>
         </div>
-        <PostCommentTextBox
-          handleAddComment={this.handleAddComment}
-        />
+        {
+          this.props.messageEditInfo.commentEditToggle ?
+            <CommentEditBox
+              handleEditComment={this.handleEditComment}
+              commentcuid={this.props.messageEditInfo.commentcuid}
+            />
+            :
+            <PostCommentTextBox
+              handleAddComment={this.handleAddComment}
+            />
+        }
         <PostCommentsList
           comments={this.props.post.comments}
           handleDeleteComment={this.handleDeleteComment}
+          handleToggleCommentEditBox={this.handleToggleCommentEditBox}
         />
       </div>
   );
   }
 }
-
 // Actions required to provide data for this component to render in sever side.
 PostDetailPage.need = [params => {
   return fetchPost(params.cuid);
@@ -59,6 +80,7 @@ PostDetailPage.need = [params => {
 function mapStateToProps(state, props) {
   return {
     post: getPost(state, props.params.cuid),
+    messageEditInfo: getEditComment(state),
   };
 }
 
@@ -72,6 +94,11 @@ PostDetailPage.propTypes = {
     comments: PropTypes.array.isRequired,
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
+  messageEditInfo: PropTypes.shape({
+    commentEditToggle: PropTypes.bool.isRequired,
+    commentcuid: PropTypes.string.isRequired,
+    commentAuthor: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default connect(mapStateToProps)(PostDetailPage);

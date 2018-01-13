@@ -81,7 +81,7 @@ export function deletePost(req, res) {
 }
 
 /**
- * Get a single post
+ * Add a message
  * @param req
  * @param res
  * @returns void
@@ -89,12 +89,9 @@ export function deletePost(req, res) {
 export function addMessage(req, res) {
   const comment = { name: req.body.post.commentName, content: req.body.post.commentContent, cuid: cuid() };
   Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
-    if(err){
-      console.error(err);
-    }
     const newPostComments = [comment, ...post.comments];
     post.set({ comments: newPostComments });
-    post.save((error, saved) => {
+    post.save((error) => {
       if (error) {
         res.status(500).send(err);
         console.error('ERROR!');
@@ -107,7 +104,7 @@ export function addMessage(req, res) {
 }
 
 /**
- * Get a single post
+ * Delete a message
  * @param req
  * @param res
  * @returns void
@@ -131,4 +128,33 @@ export function deleteMessage(req, res) {
   });
 }
 
-
+/**
+ * Edit a message
+ * @param req
+ * @param res
+ * @returns void
+ */
+export function editMessage(req, res) {
+  const oldCommentcuid = req.body.oldComment.cuid;
+  const oldCommentAuthor = req.body.oldComment.author;
+  const comment = { name: oldCommentAuthor, content: req.body.editedCommentContent, cuid: oldCommentcuid }; // cuid : cuid();
+  Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
+    const newPostComments = post.comments.map(
+      postComment => {
+        if (postComment.cuid === oldCommentcuid) {
+          return comment;
+        }
+        return postComment;
+      });
+    post.set({ comments: newPostComments });
+    post.save((error) => {
+      if (error) {
+        res.status(500).send(err);
+        console.error('ERROR!');
+      } else {
+        res.json(comment);
+        console.error('message edited');
+      }
+    });
+  });
+}

@@ -1,8 +1,7 @@
-import { ADD_POST, ADD_POSTS, DELETE_POST, ADD_COMMENT, DELETE_COMMENT } from './PostActions';
+import { ADD_POST, ADD_POSTS, DELETE_POST, ADD_COMMENT, DELETE_COMMENT, EDIT_COMMENT, TRIGGER_EDIT_TOGGLE } from './PostActions';
 
 // Initial State
 const initialState = { data: [] };
-
 const PostReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_POST :
@@ -46,11 +45,28 @@ const PostReducer = (state = initialState, action) => {
           return post;
         }),
       };
+    case EDIT_COMMENT :
+      return {
+        data: state.data.slice(0).map(post => {
+          if (post.cuid === action.cuidPost) {
+            const newComments = post.comments.map(
+              postComment => {
+                if (postComment.cuid === action.editedComment.cuid) {
+                  return action.editedComment;
+                }
+                return postComment;
+              });
+            return {
+              ...post, comments: newComments,
+            };
+          }
+          return post;
+        }),
+      };
     default:
       return state;
   }
 };
-
 /* Selectors */
 
 // Get all posts

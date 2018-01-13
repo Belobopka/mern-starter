@@ -18,5 +18,6 @@ router.route('/comments/:cuid').post(PostController.addMessage);
 
 router.route('/comments/:cuid').delete(PostController.deleteMessage);
 
+router.route('/comments/:cuid').put(PostController.editMessage);
 
 export default router;

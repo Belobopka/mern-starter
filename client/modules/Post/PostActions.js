@@ -6,8 +6,38 @@ export const ADD_POSTS = 'ADD_POSTS';
 export const DELETE_POST = 'DELETE_POST';
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const DELETE_COMMENT = 'DELETE_COMMENT';
-
+export const EDIT_COMMENT = 'EDIT_COMMENT';
+export const COMMENT_INFO = 'COMMENT_INFO';
 // Export Actions
+
+export function toggleEditCommentBox(toggle, commentcuid, commentAuthor) {
+  return (dispatch) => {
+    return dispatch({
+      type: COMMENT_INFO,
+      toggle,
+      commentcuid,
+      commentAuthor,
+    });
+  };
+}
+
+export function editComment(editedComment, cuidPost) {
+  return {
+    type: EDIT_COMMENT,
+    editedComment,
+    cuidPost,
+  };
+}
+export function editCommentRequest(cuidPost, oldComment, editedCommentContent) {
+  console.log('editCommentRequest', oldComment, editedCommentContent);
+  return (dispatch) => {
+    return callApi(`comments/${cuidPost}`, 'put', {
+      oldComment,
+      editedCommentContent,
+    })
+    .then((editedComment) => dispatch(editComment(editedComment, cuidPost)));
+  };
+}
 
 export function addComment(comment, cuidPost) {
   return {
@@ -28,6 +58,7 @@ export function addCommentRequest(cuidPost, commentName, commentContent) {
     .then((res) => dispatch(addComment(res, cuidPost)));
   };
 }
+
 
 export function deleteComment(cuidPost, cuidComment) {
   return {
