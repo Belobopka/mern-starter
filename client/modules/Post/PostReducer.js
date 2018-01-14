@@ -1,8 +1,7 @@
-import { ADD_POST, ADD_POSTS, DELETE_POST } from './PostActions';
+import { ADD_POST, ADD_POSTS, DELETE_POST, ADD_COMMENT, DELETE_COMMENT, EDIT_COMMENT } from './PostActions';
 
 // Initial State
 const initialState = { data: [] };
-
 const PostReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_POST :
@@ -20,11 +19,54 @@ const PostReducer = (state = initialState, action) => {
         data: state.data.filter(post => post.cuid !== action.cuid),
       };
 
+    case DELETE_COMMENT :
+      return {
+        data: state.data.slice(0).map(post => {
+          if (post.cuid === action.cuidPost) {
+            const newComments = post.comments.filter((cuidpostComment) => {
+              return cuidpostComment.cuid !== action.cuidComment;
+            });
+            return {
+              ...post, comments: newComments,
+            };
+          }
+          return post;
+        }),
+      };
+
+    case ADD_COMMENT :
+      return {
+        data: state.data.slice(0).map(post => {
+          if (post.cuid === action.cuidPost) {
+            return {
+              ...post, comments: [action.comment, ...post.comments],
+            };
+          }
+          return post;
+        }),
+      };
+    case EDIT_COMMENT :
+      return {
+        data: state.data.slice(0).map(post => {
+          if (post.cuid === action.cuidPost) {
+            const newComments = post.comments.map(
+              postComment => {
+                if (postComment.cuid === action.editedComment.cuid) {
+                  return action.editedComment;
+                }
+                return postComment;
+              });
+            return {
+              ...post, comments: newComments,
+            };
+          }
+          return post;
+        }),
+      };
     default:
       return state;
   }
 };
-
 /* Selectors */
 
 // Get all posts
