@@ -1,7 +1,7 @@
 import { COMMENT_INFO, COMMENT_EDIT_TRIGGER } from './PostActions';
 
-const initialMessageState = { commentEditToggle: false, commentcuid: '', commentAuthor: '', commentContent: '' };
-const MessageEditReducer = (state = initialMessageState, action) => {
+const initialCommentState = { commentEditToggle: false, commentcuid: '', commentAuthor: '', commentContent: '' };
+const CommentEditReducer = (state = initialCommentState, action) => {
   switch (action.type) {
     case COMMENT_INFO :
       return {
@@ -12,7 +12,8 @@ const MessageEditReducer = (state = initialMessageState, action) => {
       };
     case COMMENT_EDIT_TRIGGER :
       return {
-        ...state, commentEditToggle: action.payload.toggle,
+        ...state,
+        commentEditToggle: action.payload.toggle,
       };
     default:
       return state;
@@ -20,7 +21,7 @@ const MessageEditReducer = (state = initialMessageState, action) => {
 };
 
 // Get Edit
-export const getEditComment = state => state.msgEdit;
+export const getEditComment = state => state.commentEditInfo;
 
 
-export default MessageEditReducer;
+export default CommentEditReducer;

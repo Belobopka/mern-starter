@@ -42,7 +42,6 @@ export function editComment(editedComment, cuidPost) {
   };
 }
 export function editCommentRequest(cuidPost, oldComment, editedCommentContent) {
-  console.log('editCommentRequest', oldComment, editedCommentContent);
   return (dispatch) => {
     return callApi(`comments/${cuidPost}`, 'put', {
       oldComment,

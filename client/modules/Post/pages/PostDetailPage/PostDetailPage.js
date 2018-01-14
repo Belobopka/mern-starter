@@ -12,15 +12,13 @@ import { fetchPost, deleteCommentRequest, addCommentRequest, toggleEditCommentBo
 // Import Selectors
 import { getPost } from '../../PostReducer';
 
-import { getEditComment } from '../../MsgEditPostReducer';
+import { getEditComment } from '../../CommentEditPostReducer';
 
 // Import TextForm for comments
 import PostCommentTextBox from './PostCommentTextBox';
 
 // Import PostCommentList
 import PostCommentsList from '../../components/PostCommentsList';
-
-import CommentEditBox from '../../components/CommentEditBox/CommentEditBox';
 
 export class PostDetailPage extends React.Component {
   handleDeleteComment = (cuidComment) => {
@@ -32,29 +30,20 @@ export class PostDetailPage extends React.Component {
     this.props.dispatch(addCommentRequest(this.props.post.cuid, commentName, commentContent));
   }
   handleToggleCommentEditBox = (commentcuid, commentAuthor, commentContent) => {
-    console.log('this.props.messageEditInfo.commentcuid', this.props.messageEditInfo.commentcuid);
-    console.log(commentcuid);
-    // editbox is toggled
-    if (this.props.messageEditInfo.commentcuid !== commentcuid && this.props.messageEditInfo.commentcuid !== '') {
-     // this.props.dispatch(toggleEditTrigger(!this.props.messageEditInfo.commentEditToggle));
-      console.log('commentcuid !== ');
-      this.props.dispatch(toggleEditCommentBox(commentcuid, commentAuthor, commentContent));
-      return;
-    } else if (this.props.messageEditInfo.commentcuid === '') {
-      console.log('first init');
-      this.props.dispatch(toggleEditTrigger(!this.props.messageEditInfo.commentEditToggle));
+    if (this.props.commentEditInfo.commentcuid !== commentcuid && this.props.commentEditInfo.commentEditToggle) {
       this.props.dispatch(toggleEditCommentBox(commentcuid, commentAuthor, commentContent));
       return;
     }
-    this.props.dispatch(toggleEditTrigger(!this.props.messageEditInfo.commentEditToggle));
+    this.props.dispatch(toggleEditTrigger(!this.props.commentEditInfo.commentEditToggle));
     this.props.dispatch(toggleEditCommentBox(commentcuid, commentAuthor, commentContent));
   }
   handleEditComment = (newCommentData) => {
     this.props.dispatch(editCommentRequest(this.props.post.cuid, {
-      cuid: this.props.messageEditInfo.commentcuid,
-      author: this.props.messageEditInfo.commentAuthor,
+      cuid: this.props.commentEditInfo.commentcuid,
+      author: this.props.commentEditInfo.commentAuthor,
     },
     newCommentData));
+    this.props.dispatch(toggleEditTrigger(!this.props.commentEditInfo.commentEditToggle));
   }
   render = () => {
     return (
@@ -65,22 +54,15 @@ export class PostDetailPage extends React.Component {
           <p className={styles['author-name']}><FormattedMessage id="by" /> {this.props.post.name}</p>
           <p className={styles['post-desc']}>{this.props.post.content}</p>
         </div>
-        {
-          this.props.messageEditInfo.commentEditToggle ?
-            <CommentEditBox
-              handleEditComment={this.handleEditComment}
-              commentcuid={this.props.messageEditInfo.commentcuid}
-              commentContent={this.props.messageEditInfo.commentContent}
-            />
-            :
-            <PostCommentTextBox
-              handleAddComment={this.handleAddComment}
-            />
-        }
+        <PostCommentTextBox
+          handleAddComment={this.handleAddComment}
+        />
         <PostCommentsList
           comments={this.props.post.comments}
           handleDeleteComment={this.handleDeleteComment}
           handleToggleCommentEditBox={this.handleToggleCommentEditBox}
+          commentEditInfo={this.props.commentEditInfo}
+          handleEditComment={this.handleEditComment}
         />
       </div>
   );
@@ -93,9 +75,10 @@ PostDetailPage.need = [params => {
 
 // Retrieve data from store as props
 function mapStateToProps(state, props) {
+  console.log('render -detail-page', state);
   return {
     post: getPost(state, props.params.cuid),
-    messageEditInfo: getEditComment(state),
+    commentEditInfo: getEditComment(state),
   };
 }
 
@@ -109,7 +92,7 @@ PostDetailPage.propTypes = {
     comments: PropTypes.array.isRequired,
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
-  messageEditInfo: PropTypes.shape({
+  commentEditInfo: PropTypes.shape({
     commentEditToggle: PropTypes.bool.isRequired,
     commentcuid: PropTypes.string.isRequired,
     commentAuthor: PropTypes.string.isRequired,
