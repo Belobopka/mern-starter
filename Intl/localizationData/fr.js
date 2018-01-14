@@ -16,6 +16,8 @@ export default {
     createNewComment: 'Créer un nouveau message',
     deleteComment: 'Supprimer',
     editComment: 'Éditer',
+    commentContent: 'Contenu du commentaire',
+    cancel: 'Annuler',
     comment: `user {name} {value, plural,
     	  =0 {does not have any comments}
     	  =1 {has # comment}

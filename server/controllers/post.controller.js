@@ -94,10 +94,8 @@ export function addComment(req, res) {
     post.save((error) => {
       if (error) {
         res.status(500).send(err);
-        console.error('ERROR!');
       } else {
         res.json(comment);
-        console.error('Comment saved');
       }
     });
   });
@@ -116,13 +114,9 @@ export function deleteComment(req, res) {
     }
     const newPostComments = post.comments.filter(comments => comments.cuid !== req.body.cuidComment);
     post.set({ comments: newPostComments });
-    post.save(error => {
-      if (error) {
-        console.error('post delete messsage Error');
-      }
+    post.save(() => {
     })
     .then(() => {
-      console.log('message deleted');
       res.status(200).end();
     });
   });
@@ -150,10 +144,8 @@ export function editComment(req, res) {
     post.save((error) => {
       if (error) {
         res.status(500).send(err);
-        console.error('ERROR!');
       } else {
         res.json(comment);
-        console.error('message edited');
       }
     });
   });

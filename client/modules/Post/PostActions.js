@@ -29,7 +29,7 @@ export function toggleEditCommentBox(commentcuid, commentAuthor, commentContent)
         commentcuid,
         commentAuthor,
         commentContent,
-      }
+      },
     });
   };
 }
@@ -55,7 +55,7 @@ export function addComment(comment, cuidPost) {
   return {
     type: ADD_COMMENT,
     comment,
-    cuidPost
+    cuidPost,
   };
 }
 

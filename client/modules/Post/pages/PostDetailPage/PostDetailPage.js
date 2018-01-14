@@ -75,7 +75,6 @@ PostDetailPage.need = [params => {
 
 // Retrieve data from store as props
 function mapStateToProps(state, props) {
-  console.log('render -detail-page', state);
   return {
     post: getPost(state, props.params.cuid),
     commentEditInfo: getEditComment(state),

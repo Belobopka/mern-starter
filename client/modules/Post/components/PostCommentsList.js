@@ -4,7 +4,6 @@ import React, { PropTypes } from 'react';
 import PostCommentItem from './PostCommentItem/PostCommentItem';
 
 function PostCommentsList(props) {
-  console.log('PostCommentsList', props.commentEditInfo);
   return (
     <div className="listView">
         {

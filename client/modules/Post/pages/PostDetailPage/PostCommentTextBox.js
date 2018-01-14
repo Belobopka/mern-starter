@@ -1,4 +1,4 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 
 
@@ -29,8 +29,15 @@ export class PostCommentTextBox extends React.Component {
       <div className={cls}>
         <div className={styles['form-content']}>
           <h2 className={styles['form-title']}><FormattedMessage id="createNewComment" /></h2>
-          <input placeholder={this.props.intl.messages.authorName} className={styles['form-field']} value={this.state.name} onChange={this.handleNameChange} />
-          <textarea placeholder={this.props.intl.messages.postContent} className={styles['form-textarea']} value={this.state.content} onChange={this.handleContentChange} />
+          <input
+            placeholder={this.props.intl.messages.authorName}
+            className={styles['form-field']} value={this.state.name} onChange={this.handleNameChange}
+          />
+          <textarea
+            placeholder={this.props.intl.messages.commentContent}
+            className={styles['form-textarea']} value={this.state.content}
+            onChange={this.handleContentChange}
+          />
           <submit className={styles['post-submit-button']} onClick={this.addComment}><FormattedMessage id="submit" /></submit>
         </div>
       </div>

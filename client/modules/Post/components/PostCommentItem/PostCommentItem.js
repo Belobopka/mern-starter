@@ -24,17 +24,20 @@ class PostCommentItem extends React.Component {
           this.props.commentEditInfo.commentEditToggle &&
           this.props.commentEditInfo.commentcuid === this.props.comment.cuid
           ?
-            <p>
+            <div>
               <input className={styles['message-desc']} onChange={this.handleContentChange} value={this.state.content} />
+              <submit className={styles['comment-edit-submit-button']} onClick={this.props.handleToggleCommentEditBox}><FormattedMessage id="cancel" /></submit>
               <submit className={styles['comment-edit-submit-button']} onClick={this.handleEditComment}><FormattedMessage id="submit" /></submit>
-            </p>
+            </div>
           :
-            <p className={styles['post-desc']}>{this.props.comment.content}</p>
+            <div>
+              <p className={styles['post-desc']}>{this.props.comment.content}</p>
+              <p className={styles['post-action']}>
+                <submit onClick={this.props.onDelete}><FormattedMessage id="deleteComment" /></submit>
+                <submit onClick={this.props.handleToggleCommentEditBox}><FormattedMessage id="edit" /></submit>
+              </p>
+            </div>
           }
-        <p className={styles['post-action']}>
-          <submit onClick={this.props.onDelete}><FormattedMessage id="deleteComment" /></submit>
-          <submit onClick={this.props.handleToggleCommentEditBox}><FormattedMessage id="edit" /></submit>
-        </p>
         <hr className={styles.divider} />
       </div>
     );
@@ -49,7 +52,7 @@ PostCommentItem.propTypes = {
   }).isRequired,
   handleToggleCommentEditBox: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
-  commentEditInfo: PropTypes.shape({ 
+  commentEditInfo: PropTypes.shape({
     commentEditToggle: PropTypes.bool.isRequired,
     commentcuid: PropTypes.string.isRequired,
   }).isRequired,
