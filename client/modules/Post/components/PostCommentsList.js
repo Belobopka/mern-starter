@@ -12,7 +12,7 @@ function PostCommentsList(props) {
             comment={comment}
             key={comment.cuid}
             onDelete={() => props.handleDeleteComment(comment.cuid)}
-            handleToggleCommentEditBox={() => props.handleToggleCommentEditBox(comment.cuid, comment.name)}
+            handleToggleCommentEditBox={() => props.handleToggleCommentEditBox(comment.cuid, comment.name, comment.content)}
           />
         ))
         }

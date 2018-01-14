@@ -31,6 +31,7 @@
   border: 1px solid #ddd;
   outline: none;
   color: #212121;
+  min-height: 100px; 
 }
 
 textarea {

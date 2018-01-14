@@ -8,15 +8,28 @@ export const ADD_COMMENT = 'ADD_COMMENT';
 export const DELETE_COMMENT = 'DELETE_COMMENT';
 export const EDIT_COMMENT = 'EDIT_COMMENT';
 export const COMMENT_INFO = 'COMMENT_INFO';
+export const COMMENT_EDIT_TRIGGER = 'COMMENT_EDIT_TRIGGER';
+
 // Export Actions
 
-export function toggleEditCommentBox(toggle, commentcuid, commentAuthor) {
+export function toggleEditTrigger(toggle) {
+  return (dispatch) => {
+    return dispatch({
+      type: COMMENT_EDIT_TRIGGER,
+      payload: { toggle },
+    });
+  };
+}
+
+export function toggleEditCommentBox(commentcuid, commentAuthor, commentContent) {
   return (dispatch) => {
     return dispatch({
       type: COMMENT_INFO,
-      toggle,
-      commentcuid,
-      commentAuthor,
+      payload: {
+        commentcuid,
+        commentAuthor,
+        commentContent,
+      }
     });
   };
 }

@@ -86,7 +86,7 @@ export function deletePost(req, res) {
  * @param res
  * @returns void
  */
-export function addMessage(req, res) {
+export function addComment(req, res) {
   const comment = { name: req.body.post.commentName, content: req.body.post.commentContent, cuid: cuid() };
   Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
     const newPostComments = [comment, ...post.comments];
@@ -97,7 +97,7 @@ export function addMessage(req, res) {
         console.error('ERROR!');
       } else {
         res.json(comment);
-        console.error('addMessage saved');
+        console.error('Comment saved');
       }
     });
   });
@@ -109,7 +109,7 @@ export function addMessage(req, res) {
  * @param res
  * @returns void
  */
-export function deleteMessage(req, res) {
+export function deleteComment(req, res) {
   Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
     if (err) {
       res.status(500).send(err);
@@ -122,7 +122,7 @@ export function deleteMessage(req, res) {
       }
     })
     .then(() => {
-      console.log('post got');
+      console.log('message deleted');
       res.status(200).end();
     });
   });
@@ -134,7 +134,7 @@ export function deleteMessage(req, res) {
  * @param res
  * @returns void
  */
-export function editMessage(req, res) {
+export function editComment(req, res) {
   const oldCommentcuid = req.body.oldComment.cuid;
   const oldCommentAuthor = req.body.oldComment.author;
   const comment = { name: oldCommentAuthor, content: req.body.editedCommentContent, cuid: oldCommentcuid }; // cuid : cuid();

@@ -14,10 +14,10 @@ router.route('/posts').post(PostController.addPost);
 // Delete a post by cuid
 router.route('/posts/:cuid').delete(PostController.deletePost);
 
-router.route('/comments/:cuid').post(PostController.addMessage);
+router.route('/comments/:cuid').post(PostController.addComment);
 
-router.route('/comments/:cuid').delete(PostController.deleteMessage);
+router.route('/comments/:cuid').delete(PostController.deleteComment);
 
-router.route('/comments/:cuid').put(PostController.editMessage);
+router.route('/comments/:cuid').put(PostController.editComment);
 
 export default router;

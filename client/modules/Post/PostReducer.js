@@ -1,4 +1,4 @@
-import { ADD_POST, ADD_POSTS, DELETE_POST, ADD_COMMENT, DELETE_COMMENT, EDIT_COMMENT, TRIGGER_EDIT_TOGGLE } from './PostActions';
+import { ADD_POST, ADD_POSTS, DELETE_POST, ADD_COMMENT, DELETE_COMMENT, EDIT_COMMENT } from './PostActions';
 
 // Initial State
 const initialState = { data: [] };

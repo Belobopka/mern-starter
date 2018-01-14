@@ -9,6 +9,7 @@
   margin-bottom: 16px;
   font-weight: 400;
   color: #616161;
+  word-wrap: break-word;
 }
 
 .post-title a{
@@ -20,12 +21,14 @@
   font-size: 16px;
   margin-bottom: 16px;
   color: #757575;
+  word-wrap: break-word;
 }
 
 .post-desc{
   font-size: 14px;
   color: #888;
   margin-bottom: 8px;
+  word-wrap: break-word;
 }
 
 .post-action a{

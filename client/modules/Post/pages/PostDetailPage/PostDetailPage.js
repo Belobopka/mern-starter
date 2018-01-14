@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import styles from '../../components/PostListItem/PostListItem.css';
 
 // Import Actions
-import { fetchPost, deleteCommentRequest, addCommentRequest, toggleEditCommentBox, editCommentRequest } from '../../PostActions';
+import { fetchPost, deleteCommentRequest, addCommentRequest, toggleEditCommentBox, editCommentRequest, toggleEditTrigger } from '../../PostActions';
 
 // Import Selectors
 import { getPost } from '../../PostReducer';
@@ -31,9 +31,23 @@ export class PostDetailPage extends React.Component {
   handleAddComment = (commentName, commentContent) => {
     this.props.dispatch(addCommentRequest(this.props.post.cuid, commentName, commentContent));
   }
-  handleToggleCommentEditBox = (commentcuid, commentAuthor) => {
+  handleToggleCommentEditBox = (commentcuid, commentAuthor, commentContent) => {
+    console.log('this.props.messageEditInfo.commentcuid', this.props.messageEditInfo.commentcuid);
+    console.log(commentcuid);
     // editbox is toggled
-    this.props.dispatch(toggleEditCommentBox(!this.props.messageEditInfo.commentEditToggle, commentcuid, commentAuthor));
+    if (this.props.messageEditInfo.commentcuid !== commentcuid && this.props.messageEditInfo.commentcuid !== '') {
+     // this.props.dispatch(toggleEditTrigger(!this.props.messageEditInfo.commentEditToggle));
+      console.log('commentcuid !== ');
+      this.props.dispatch(toggleEditCommentBox(commentcuid, commentAuthor, commentContent));
+      return;
+    } else if (this.props.messageEditInfo.commentcuid === '') {
+      console.log('first init');
+      this.props.dispatch(toggleEditTrigger(!this.props.messageEditInfo.commentEditToggle));
+      this.props.dispatch(toggleEditCommentBox(commentcuid, commentAuthor, commentContent));
+      return;
+    }
+    //this.props.dispatch(toggleEditTrigger(!this.props.messageEditInfo.commentEditToggle));
+    this.props.dispatch(toggleEditCommentBox(commentcuid, commentAuthor, commentContent));
   }
   handleEditComment = (newCommentData) => {
     this.props.dispatch(editCommentRequest(this.props.post.cuid, {
@@ -56,6 +70,7 @@ export class PostDetailPage extends React.Component {
             <CommentEditBox
               handleEditComment={this.handleEditComment}
               commentcuid={this.props.messageEditInfo.commentcuid}
+              commentContent={this.props.messageEditInfo.commentContent}
             />
             :
             <PostCommentTextBox
@@ -98,6 +113,7 @@ PostDetailPage.propTypes = {
     commentEditToggle: PropTypes.bool.isRequired,
     commentcuid: PropTypes.string.isRequired,
     commentAuthor: PropTypes.string.isRequired,
+    commentContent: PropTypes.string.isRequired,
   }).isRequired,
 };
 

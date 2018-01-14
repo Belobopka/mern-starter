@@ -8,7 +8,10 @@ import styles from './CommentEditBox.css';
 export class CommentEditBox extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { content: '' };
+    this.state = { content: this.props.commentContent };
+  }
+  componentWillReceiveProps(nextProps) {
+    this.setState({ content: nextProps.commentContent });
   }
   handleContentChange = (e) => {
     this.setState({ content: e.target.value });
@@ -23,8 +26,8 @@ export class CommentEditBox extends React.Component {
     return (
       <div className={cls}>
         <div className={styles['form-content']}>
-          <h2 className={styles['form-title']}><FormattedMessage id="createNewPost" /></h2>
-          <textarea placeholder={this.props.intl.messages.postContent} className={styles['form-field']} value={this.state.content} onChange={this.handleContentChange} />
+          <h2 className={styles['form-title']}><FormattedMessage id="editComment" /></h2>
+          <textarea className={styles['form-field']} value={this.state.content} onChange={this.handleContentChange} />
           <button className={styles['post-submit-button']} onClick={this.handleEdit}><FormattedMessage id="submit" /></button>
         </div>
       </div>

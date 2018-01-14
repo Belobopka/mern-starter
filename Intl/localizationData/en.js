@@ -13,7 +13,9 @@ export default {
     postContent: 'Post Content',
     submit: 'Submit',
     edit: 'Edit',
-    deleteMessage: 'Delete',
+    createNewComment: 'Create new comment',
+    deleteComment: 'Delete',
+    editComment: 'Edit Comment',
     comment: `user {name} {value, plural,
     	  =0 {does not have any comments}
     	  =1 {has # comment}

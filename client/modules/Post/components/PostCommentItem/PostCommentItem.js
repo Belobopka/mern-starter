@@ -10,7 +10,7 @@ function PostCommentItem(props) {
       <p className={styles['author-name']}><FormattedMessage id="by" /> {props.comment.name}</p>
       <p className={styles['post-desc']}>{props.comment.content}</p>
       <p className={styles['post-action']}>
-        <submit onClick={props.onDelete}><FormattedMessage id="deleteMessage" /></submit>
+        <submit onClick={props.onDelete}><FormattedMessage id="deleteComment" /></submit>
         <submit onClick={props.handleToggleCommentEditBox}><FormattedMessage id="edit" /></submit>
       </p>
       <hr className={styles.divider} />
