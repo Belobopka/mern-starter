@@ -22,9 +22,7 @@ import PostCommentsList from '../../components/PostCommentsList';
 
 export class PostDetailPage extends React.Component {
   handleDeleteComment = (cuidComment) => {
-    if (confirm('Do you want to delete this message?')) { // eslint-disable-line
-      this.props.dispatch(deleteCommentRequest(this.props.post.cuid, cuidComment));
-    }
+    this.props.dispatch(deleteCommentRequest(this.props.post.cuid, cuidComment));
   };
   handleAddComment = (commentName, commentContent) => {
     this.props.dispatch(addCommentRequest(this.props.post.cuid, commentName, commentContent));

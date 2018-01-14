@@ -18,6 +18,7 @@ export default {
     editComment: 'Éditer',
     commentContent: 'Contenu du commentaire',
     cancel: 'Annuler',
+    deleteAlert: 'Voulez-vous supprimer?',
     comment: `user {name} {value, plural,
     	  =0 {does not have any comments}
     	  =1 {has # comment}
