@@ -4,7 +4,6 @@ import {
   DELETE_POST,
   ADD_COMMENT,
   DELETE_COMMENT,
-  EDIT_COMMENT,
   COMMENT_INFO,
   COMMENT_EDIT_TRIGGER,
   COMMENT_EDIT_AND_TRIGGER } from './PostActions';
@@ -60,25 +59,6 @@ const PostReducer = (state = initialState, action) => {
           if (post.cuid === action.cuidPost) {
             return {
               ...post, comments: [action.comment, ...post.comments],
-            };
-          }
-          return post;
-        }),
-      };
-    case EDIT_COMMENT :
-      return {
-        ...state,
-        data: state.data.slice(0).map(post => {
-          if (post.cuid === action.cuidPost) {
-            const newComments = post.comments.map(
-              postComment => {
-                if (postComment.cuid === action.editedComment.cuid) {
-                  return action.editedComment;
-                }
-                return postComment;
-              });
-            return {
-              ...post, comments: newComments,
             };
           }
           return post;
