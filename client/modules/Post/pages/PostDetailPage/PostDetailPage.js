@@ -34,6 +34,12 @@ export class PostDetailPage extends React.Component {
     this.props.dispatch(toggleEditCommentBox(commentcuid, commentAuthor, commentContent));
   }
   handleEditComment = (newCommentData) => {
+    if (
+      newCommentData.trim().length <= 0 ||
+      this.props.commentEditInfo.commentContent === newCommentData) {
+      this.props.dispatch(toggleEditTrigger(!this.props.commentEditInfo.commentEditToggle));
+      return;
+    }
     this.props.dispatch(editAndToggleCommentRequest(this.props.post.cuid, {
       cuid: this.props.commentEditInfo.commentcuid,
       author: this.props.commentEditInfo.commentAuthor,

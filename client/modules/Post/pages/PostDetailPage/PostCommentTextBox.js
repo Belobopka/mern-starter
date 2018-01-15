@@ -17,6 +17,9 @@ export class PostCommentTextBox extends React.Component {
     this.setState({ content: e.target.value });
   }
   addComment = () => {
+    if (this.state.name.trim().length <= 0 || this.state.content.trim().length <= 0) {
+      return;
+    }
     const name = this.state.name;
     const content = this.state.content;
     this.props.handleAddComment(name, content);
