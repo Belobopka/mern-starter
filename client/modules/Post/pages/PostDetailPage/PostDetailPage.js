@@ -7,12 +7,10 @@ import { FormattedMessage } from 'react-intl';
 import styles from '../../components/PostListItem/PostListItem.css';
 
 // Import Actions
-import { fetchPost, deleteCommentRequest, addCommentRequest, toggleEditCommentBox, editCommentRequest, toggleEditTrigger } from '../../PostActions';
+import { fetchPost, deleteCommentRequest, addCommentRequest, toggleEditCommentBox, editAndToggleCommentRequest, toggleEditTrigger } from '../../PostActions';
 
 // Import Selectors
-import { getPost } from '../../PostReducer';
-
-import { getEditComment } from '../../CommentEditPostReducer';
+import { getPost, getEditComment } from '../../PostReducer';
 
 // Import TextForm for comments
 import PostCommentTextBox from './PostCommentTextBox';
@@ -36,12 +34,19 @@ export class PostDetailPage extends React.Component {
     this.props.dispatch(toggleEditCommentBox(commentcuid, commentAuthor, commentContent));
   }
   handleEditComment = (newCommentData) => {
-    this.props.dispatch(editCommentRequest(this.props.post.cuid, {
+    if (
+      newCommentData.trim().length <= 0 ||
+      this.props.commentEditInfo.commentContent === newCommentData) {
+      this.props.dispatch(toggleEditTrigger(!this.props.commentEditInfo.commentEditToggle));
+      return;
+    }
+    this.props.dispatch(editAndToggleCommentRequest(this.props.post.cuid, {
       cuid: this.props.commentEditInfo.commentcuid,
       author: this.props.commentEditInfo.commentAuthor,
     },
-    newCommentData));
-    this.props.dispatch(toggleEditTrigger(!this.props.commentEditInfo.commentEditToggle));
+    newCommentData,
+    !this.props.commentEditInfo.commentEditToggle,
+    ));
   }
   render = () => {
     return (

@@ -9,7 +9,7 @@ export const DELETE_COMMENT = 'DELETE_COMMENT';
 export const EDIT_COMMENT = 'EDIT_COMMENT';
 export const COMMENT_INFO = 'COMMENT_INFO';
 export const COMMENT_EDIT_TRIGGER = 'COMMENT_EDIT_TRIGGER';
-
+export const COMMENT_EDIT_AND_TRIGGER = 'COMMENT_EDIT_AND_TRIGGER';
 // Export Actions
 
 export function toggleEditTrigger(toggle) {
@@ -33,21 +33,25 @@ export function toggleEditCommentBox(commentcuid, commentAuthor, commentContent)
     });
   };
 }
-
-export function editComment(editedComment, cuidPost) {
-  return {
-    type: EDIT_COMMENT,
-    editedComment,
-    cuidPost,
+export function editAndToggleComment(editedComment, cuidPost, toggle) {
+  return (dispatch) => {
+    return dispatch({
+      type: COMMENT_EDIT_AND_TRIGGER,
+      payload: {
+        editedComment,
+        cuidPost,
+        toggle,
+      },
+    });
   };
 }
-export function editCommentRequest(cuidPost, oldComment, editedCommentContent) {
+export function editAndToggleCommentRequest(cuidPost, oldComment, editedCommentContent, toggle) {
   return (dispatch) => {
     return callApi(`comments/${cuidPost}`, 'put', {
       oldComment,
       editedCommentContent,
     })
-    .then((editedComment) => dispatch(editComment(editedComment, cuidPost)));
+    .then((editedComment) => dispatch(editAndToggleComment(editedComment, cuidPost, toggle)));
   };
 }
 
