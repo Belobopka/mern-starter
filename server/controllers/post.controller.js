@@ -46,6 +46,7 @@ export function addPost(req, res) {
   });
 }
 
+
 /**
  * Get a single post
  * @param req
@@ -75,6 +76,77 @@ export function deletePost(req, res) {
 
     post.remove(() => {
       res.status(200).end();
+    });
+  });
+}
+
+/**
+ * Add a message
+ * @param req
+ * @param res
+ * @returns void
+ */
+export function addComment(req, res) {
+  const comment = { name: req.body.post.commentName, content: req.body.post.commentContent, cuid: cuid() };
+  Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
+    const newPostComments = [comment, ...post.comments];
+    post.set({ comments: newPostComments });
+    post.save((error) => {
+      if (error) {
+        res.status(500).send(err);
+      } else {
+        res.json(comment);
+      }
+    });
+  });
+}
+
+/**
+ * Delete a message
+ * @param req
+ * @param res
+ * @returns void
+ */
+export function deleteComment(req, res) {
+  Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
+    if (err) {
+      res.status(500).send(err);
+    }
+    const newPostComments = post.comments.filter(comments => comments.cuid !== req.body.cuidComment);
+    post.set({ comments: newPostComments });
+    post.save(() => {
+    })
+    .then(() => {
+      res.status(200).end();
+    });
+  });
+}
+
+/**
+ * Edit a message
+ * @param req
+ * @param res
+ * @returns void
+ */
+export function editComment(req, res) {
+  const oldCommentcuid = req.body.oldComment.cuid;
+  const oldCommentAuthor = req.body.oldComment.author;
+  const comment = { name: oldCommentAuthor, content: req.body.editedCommentContent, cuid: oldCommentcuid }; // cuid : cuid();
+  Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
+    const newPostComments = post.comments.map(
+      postComment => {
+        if (postComment.cuid === oldCommentcuid) {
+          return comment;
+        }
+        return postComment;
+      });
+    post.set({ comments: newPostComments });
+    post.save((error) => {
+      if (error) {
+        res.status(500).send(err);
+      } else {
+        res.json(comment);
+      }
     });
   });
 }
